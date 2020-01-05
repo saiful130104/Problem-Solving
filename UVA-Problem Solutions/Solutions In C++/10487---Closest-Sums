@@ -1,0 +1,78 @@
+# 10487---Closest-Sums
+using binary search
+///link : https://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&page=show_problem&problem=1428
+
+#include<bits/stdc++.h>
+
+using namespace std;
+typedef long long int lng;
+
+lng sum[499510],key,mn;
+int p=0,cs=1;
+
+bool min_find(int index)
+{
+    if(index>p || index<1)
+        return 0;
+    lng s = abs(key-sum[index]);
+    if(mn>=s)
+    {
+        mn = s;
+        return 1;
+    }
+    return 0;
+}
+
+int lower(lng key)
+{
+    mn = 10000000000000;
+    int lo = 1, hi = p,idx=0,mid=0;
+    int ts=70;
+    while(ts--)
+    {
+        mid = (lo+hi)>>1;
+        if(min_find(mid+1)) idx = mid+1;
+        if(min_find(mid-1)) idx = mid-1;
+        if(min_find(mid)) idx = mid;
+        if(sum[mid]==key)
+            return mid;
+        if(sum[mid]<key)
+            lo = mid+1;
+        else
+            hi=mid-1;
+    }
+    return idx;
+}
+
+void solve(int n)
+{
+    lng ara[n+1];
+    for(int i=0; i<n; i++)
+        scanf("%lld",ara+i);
+    p=0;
+    for(int i=0; i+1<n; i++)
+    {
+        for(int j=i+1; j<n; j++)
+            sum[++p]=ara[i]+ara[j];
+    }
+    sort(sum,sum+p);
+    int m;
+    scanf("%d",&m);
+    printf("Case %d:\n",cs++);
+    while(m--)
+    {
+        scanf("%lld",&key);
+        printf("Closest sum to %lld is %lld.\n",key,sum[lower(key)]);
+    }
+
+}
+
+int main()
+{
+
+    int tst;
+
+    while(scanf("%d",&tst),tst)
+        solve(tst);
+    return 0;
+}
