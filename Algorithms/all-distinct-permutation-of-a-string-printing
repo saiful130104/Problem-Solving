@@ -1,0 +1,45 @@
+///all distinct permutation of a string
+
+#include<bits/stdc++.h>
+#define ms(a,v) memset(a,v,sizeof a)
+
+using namespace std;
+
+int sz ;
+string ans,str;
+bool taken[107];
+
+void back()
+{
+    if(ans.size() == sz )
+    {
+        cout<<ans<<"\n";
+        return;
+    }
+    for(int i = 0 ; i < sz ; i++ )
+    {
+        if(taken[i] == false){
+            taken[i] = true;
+            ans = ans + str[i];
+            back();
+            taken[i] = false;
+            int pos = ans.size()-1;
+            pos = max(pos,0);
+            ans.erase(pos,1);
+            while(str[i]==str[i+1] && i+1 < sz )i++;
+        }
+    }
+}
+
+int main()
+{
+    while(cin>>str)
+    {
+        sz = str.size();
+        sort(str.begin(),str.end());
+        ans.clear();
+        ms(taken,false);
+        back();
+    }
+    return 0;
+}
