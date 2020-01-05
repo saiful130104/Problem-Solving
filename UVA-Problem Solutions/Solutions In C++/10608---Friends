@@ -1,0 +1,53 @@
+# 10608---Friends
+///link: https://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&category=24&page=show_problem&problem=1549
+
+#include<bits/stdc++.h>
+#define sc scanf
+#define sfi(a) sc("%d",&a)
+#define sfi2(a,b) sc("%d%d",&a,&b)
+#define sfl(a) sc("%lld",&a)
+#define sfl2(a,b) sc("%lld%lld",&a,&b)
+#define mset(ara,value) memset(ara,value,sizeof(ara))
+
+using namespace std;
+typedef long long int lng;
+
+int parent[30004],Size[30004];
+
+int Find(int x)
+{
+    if(parent[x]==x) return x;
+    return parent[x] = Find(parent[x]);
+}
+
+void solve()
+{
+   int n,p;
+   sfi2(n,p);
+   for(int i=0; i<=n; i++) parent[i]=i,Size[i]=1;
+    int ans = 1;
+   for(int i=0; i<p; i++)
+   {
+       int a,b;
+       sfi2(a,b);
+       int u = Find(a);
+       int v = Find(b);
+        if(u != v)
+        {
+            parent[u] = v;
+            Size[parent[u]] += Size[u];
+            ans = max(ans,Size[parent[u]]);
+        }
+   }
+   printf("%d\n",ans);
+    return;
+}
+
+int main()
+{
+    int tst;
+    sfi(tst);
+    while(tst--)
+        solve();
+    return 0;
+}
