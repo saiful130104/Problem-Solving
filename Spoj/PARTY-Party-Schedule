@@ -1,0 +1,52 @@
+#include<bits/stdc++.h>
+#define mset(ara,value) memset(ara,value,sizeof(ara))
+using namespace std;
+
+int dp[104][505],weight[104],value[104],ddp[104][505];
+
+int knapsack(int total_weight, int item)
+{
+    for(int i=1; i<=item; i++)
+    {
+        for(int j=1; j<=total_weight; j++)
+        {
+            if(j<weight[i])
+            {
+                dp[i][j] = dp[i-1][j];
+                ddp[i][j] = ddp[i-1][j];
+            }
+            else
+            {
+                int v1 = value[i]+dp[i-1][j-weight[i]];
+                int v2 = dp[i-1][j];
+                dp[i][j] = max(v1,v2);
+                if(v1==v2)
+                    ddp[i][j] = min(weight[i]+ddp[i-1][j-weight[i]], ddp[i-1][j]);
+                else if(v1>v2)
+                    ddp[i][j] = weight[i]+ddp[i-1][j-weight[i]];
+                else
+                    ddp[i][j] = ddp[i-1][j];
+            }
+        }
+    }
+
+    return dp[item][total_weight];
+}
+
+int main()
+{
+    int total_weight,item;
+    while(scanf("%d%d",&total_weight,&item),total_weight || item)
+    {
+
+        for(int i=0; i<item; i++)
+        {   scanf("%d",weight+i+1);
+            scanf("%d",value+i+1);
+        }
+        mset(dp,0);
+        mset(ddp,0);
+        int res = knapsack(total_weight,item);
+        printf("%d %d\n",ddp[item][total_weight],res);
+    }
+    return 0;
+}
