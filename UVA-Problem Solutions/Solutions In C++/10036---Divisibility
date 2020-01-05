@@ -1,0 +1,54 @@
+# 10036---Divisibility
+simple dp problem
+/// link : https://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&category=24&page=show_problem&problem=977
+
+#include<bits/stdc++.h>
+#define sc scanf
+#define sfi(a) sc("%d",&a)
+#define sfi2(a,b) sc("%d%d",&a,&b)
+#define sfl(a) sc("%lld",&a)
+#define sfl2(a,b) sc("%lld%lld",&a,&b)
+
+using namespace std;
+typedef long long int lng;
+
+int ara[10005],k,n;
+int dp[10005][105];
+bool vis[10005][105];
+bool check(int i,int sum)
+{
+    if(i==n)
+    {
+        if(sum%k)
+            return 0;
+        return 1;
+    }
+    sum = (sum+k)%k;
+    if(vis[i][sum])
+        return dp[i][sum];
+    vis[i][sum] = 1;
+    return dp[i][sum] = check(i+1,sum+ara[i+1])||check(i+1,sum-ara[i+1]);
+}
+
+void solve()
+{
+    sfi2(n,k);
+    memset(vis,false,sizeof(vis));
+    memset(dp,false,sizeof(dp));
+    for(int i=1; i<=n; i++)
+        sfi(ara[i]);
+    if(check(1,ara[1]))
+        printf("Divisible\n");
+    else
+        printf("Not divisible\n");
+
+}
+
+int main()
+{
+    int tst;
+    sfi(tst);
+    while(tst--)
+        solve();
+    return 0;
+}
