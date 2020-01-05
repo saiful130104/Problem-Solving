@@ -1,0 +1,73 @@
+# 10852---Less-Prime
+bruteforce/binary search
+///link: https://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&category=24&page=show_problem&problem=1793
+
+#include<bits/stdc++.h>
+#define sc scanf
+#define sfi(a) sc("%d",&a)
+#define sfi2(a,b) sc("%d%d",&a,&b)
+#define sfl(a) sc("%lld",&a)
+#define sfl2(a,b) sc("%lld%lld",&a,&b)
+
+using namespace std;
+typedef long long int lng;
+
+int prime_list[1230];
+bool mark[10001];
+
+void seive()
+{
+    int sq = sqrt(10001);
+    int idx = 0;
+    prime_list[idx]=2;
+    for(int i=4; i<10001; i+=2) mark[i]=1;
+    for(int i=3; i<10001; i+=2)
+    {
+        if(!mark[i])
+        {
+            prime_list[++idx]=i;
+            for(int j=i*i; j<10001; j = j + 2*i) mark[j]=1;
+        }
+    }
+    return;
+}
+
+int bin_search(int n)
+{
+    int lo = 0, hi = 1228, mid,idx=0,dif=0;
+    int ts=50;
+    while(ts--)
+    {
+        mid = (lo+hi)>>1;
+        if(prime_list[mid]<=n && prime_list[mid]*2>n)
+        {
+            if(dif<n-prime_list[mid])
+            {
+                dif = n-prime_list[mid];
+                idx = mid;
+            }
+            hi = mid-1;
+        }
+        else if(prime_list[mid]>=n)
+            hi = mid - 1;
+        else lo = mid + 1;
+    }
+    return idx;
+}
+
+void solve()
+{
+    int n;
+    sfi(n);
+    printf("%d\n",prime_list[bin_search(n)]);
+}
+
+int main()
+{
+    seive();
+    int tst;
+    sfi(tst);
+    while(tst--)
+        solve();
+    return 0;
+}
