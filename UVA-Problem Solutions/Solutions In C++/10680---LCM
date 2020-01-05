@@ -1,0 +1,53 @@
+# 10680---LCM
+/// link : https://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&category=24&page=show_problem&problem=977
+
+#include<bits/stdc++.h>
+#define sc scanf
+#define sfi(a) sc("%d",&a)
+#define sfi2(a,b) sc("%d%d",&a,&b)
+#define sfl(a) sc("%lld",&a)
+#define sfl2(a,b) sc("%lld%lld",&a,&b)
+
+using namespace std;
+typedef long long int lng;
+
+bool mark[1000000];
+int prime_list[78498], idx;
+
+void seive()
+{
+    int sq = sqrt(1000001)+1;
+    prime_list[idx]=2;
+    for(int i=3; i<sq; i+=2)
+    {
+        if(!mark[i])
+            for(int j=i*i; j<1000001; j+=2*i) mark[j]=1;
+    }
+    for(int i=3; i<1000001; i+=2) if(!mark[i]) prime_list[++idx]=i;
+    return ;
+}
+
+void solve(lng n)
+{
+    lng ans = 1;
+    lng a = log(n)/log(2);
+    lng b = log(n)/log(5);
+    a-=b;
+    for(int i=0; i<a; i++) ans = (ans*2)%10;
+    for(int i=1; i<=idx; i++)
+    {
+        if(prime_list[i]>n) break;
+        if(prime_list[i]==5) continue;
+        for(lng j=prime_list[i]; j<=n; j*=prime_list[i]) ans = (ans*prime_list[i])%10;
+    }
+    printf("%lld\n",ans);
+}
+
+int main()
+{
+    seive();
+    lng tst;
+    while(sfl(tst),tst)
+        solve(tst);
+    return 0;
+}
